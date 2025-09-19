@@ -1,8 +1,6 @@
 import java.util.List;
 
 public interface TaskManager {
-    int generateId();
-
     // Методы для Task
     List<Task> getAllTasks();
 
@@ -42,8 +40,6 @@ public interface TaskManager {
     void deleteSubtaskById(int id);
 
     List<Subtask> getSubtasksOfEpic(int epicId);
-
-    void updateEpicStatus(Epic epic);
 
     List<Task> getHistory();
 }

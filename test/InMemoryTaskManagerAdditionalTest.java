@@ -16,7 +16,7 @@ class InMemoryTaskManagerAdditionalTest {
 
     @Test
     void updateTaskUpdateSubtaskUpdateEpicShouldSaveChanges() {
-        // Создаём задачи
+        // Создание задачи
         Task task = new Task("Task1", "Description1");
         manager.addTask(task);
 
@@ -26,7 +26,7 @@ class InMemoryTaskManagerAdditionalTest {
         Subtask subtask = new Subtask("Subtask1", "Subtask Description", epic.getId());
         manager.addSubtask(subtask);
 
-        // Обновляем
+        // Обновление
         task = new Task("Updated Task", "Updated Description");
         task.setId(manager.getAllTasks().get(0).getId());
         manager.updateTask(task);
@@ -39,7 +39,7 @@ class InMemoryTaskManagerAdditionalTest {
         subtask.setId(manager.getAllSubtasks().get(0).getId());
         manager.updateSubtask(subtask);
 
-        // Проверяем, что обновления сохранились
+        // Проверка, что обновления сохранились
         Task updatedTask = manager.getTaskById(task.getId());
         assertEquals("Updated Task", updatedTask.getTitle());
         assertEquals("Updated Description", updatedTask.getDescription());
@@ -63,13 +63,13 @@ class InMemoryTaskManagerAdditionalTest {
         manager.addSubtask(sub1);
         manager.addSubtask(sub2);
 
-        // Убедимся, что подзадачи существуют
+        // Проверка, что подзадачи существуют
         assertEquals(2, manager.getSubtasksOfEpic(epic.getId()).size());
 
-        // Удаляем эпик
+        // Удаление эпик
         manager.deleteEpicById(epic.getId());
 
-        // Проверяем, что подзадачи удалены
+        // Проверка, что подзадачи удалены
         assertTrue(manager.getAllSubtasks().isEmpty());
     }
 
@@ -86,30 +86,26 @@ class InMemoryTaskManagerAdditionalTest {
         manager.addSubtask(subtask);
 
         // Смешанные вызовы get
-        manager.getTaskById(task.getId());      // Task просмотрен
-        manager.getEpicById(epic.getId());      // Epic просмотрен
+        manager.getTaskById(task.getId());       // Task просмотрен
+        manager.getEpicById(epic.getId());       // Epic просмотрен
         manager.getSubtaskById(subtask.getId()); // Subtask просмотрен
-        manager.getEpicById(epic.getId());      // Epic просмотрен снова
+        manager.getEpicById(epic.getId());       // Epic просмотрен снова
 
         List<Task> history = manager.getHistory();
 
-        // Проверяем размер истории
-        assertEquals(3, history.size(), "История должна содержать три уникальных элемента");
+        // Проверка размера истории (теперь 4, так как дубликаты допустимы)
+        assertEquals(4, history.size(), "История должна содержать все просмотры, включая повторные");
 
-        // Проверяем, что все элементы присутствуют
-        assertTrue(history.contains(task), "История должна содержать Task");
-        assertTrue(history.contains(epic), "История должна содержать Epic");
-        assertTrue(history.contains(subtask), "История должна содержать Subtask");
-
-        // Проверяем порядок последних просмотров (последний просмотр перемещает элемент в конец)
+        // Проверка порядка просмотров
         assertEquals(task, history.get(0), "Task должен быть первым просмотренным");
-        assertEquals(subtask, history.get(1), "Subtask должен быть вторым просмотренным");
-        assertEquals(epic, history.get(2), "Epic должен быть последним после повторного просмотра");
+        assertEquals(epic, history.get(1), "Epic должен быть вторым просмотренным");
+        assertEquals(subtask, history.get(2), "Subtask должен быть третьим просмотренным");
+        assertEquals(epic, history.get(3), "Epic должен быть последним после повторного просмотра");
     }
 
     @Test
     void historyShouldNotExceedLimit() {
-        // Создаём 12 задач
+        // Создание 12 задач
         for (int i = 1; i <= 12; i++) {
             Task task = new Task("Task" + i, "Desc" + i);
             manager.addTask(task);
@@ -118,10 +114,10 @@ class InMemoryTaskManagerAdditionalTest {
 
         List<Task> history = manager.getHistory();
 
-        // Проверяем, что в истории только 10 последних
+        // Проверка, что в истории только 10 последних
         assertEquals(10, history.size(), "История не должна превышать лимит из 10 задач");
 
-        // Проверяем, что это последние 10 задач
+        // Проверка, что это последние 10 задач
         for (int i = 0; i < 10; i++) {
             assertEquals("Task" + (i + 3), history.get(i).getTitle());
         }

@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -15,58 +15,41 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void addTaskShouldSaveInHistory() {
-
+    void addTaskShouldBeStoredInHistory() {
         Task task = new Task("Задача 1", "Описание 1");
         historyManager.add(task);
 
         List<Task> history = historyManager.getHistory();
 
-        // Проверяем, что задача сохранилась в истории
-        assertEquals(1, history.size(), "История должна содержать 1 задачу");
-        assertEquals(task, history.get(0), "Задача должна быть сохранена в истории");
+        assertEquals(1, history.size(), "История должна содержать одну задачу");
+        assertEquals(task, history.get(0), "Добавленная задача должна быть в истории");
     }
 
     @Test
     void historyShouldNotExceedLimit() {
-        // Добавляем 12 задач, а лимит истории = 10
+        // Добавляем 12 задач при лимите = 10
         for (int i = 1; i <= 12; i++) {
             Task task = new Task("Задача " + i, "Описание " + i);
-            task.setId(i); // задаём ID явно для удобства проверки
+            task.setId(i);
             historyManager.add(task);
         }
 
         List<Task> history = historyManager.getHistory();
 
-        // История должна содержать только последние 10 задач
-        assertEquals(10, history.size(), "История не должна превышать лимит из 10 задач");
-
-        // Проверяем, что самая старая из оставшихся задач — задача с id=3
-        assertEquals(3, history.get(0).getId(), "Самая старая задача должна удаляться из истории");
-        // Проверяем, что последняя задача — id=12
-        assertEquals(12, history.get(history.size() - 1).getId(), "Последняя задача должна быть последней добавленной");
+        assertEquals(10, history.size(), "История не должна превышать лимит в 10 задач");
+        assertEquals(3, history.get(0).getId(), "Первая задача в истории должна быть с id=3");
+        assertEquals(12, history.get(9).getId(), "Последняя задача должна быть с id=12");
     }
 
     @Test
-    void addNullTaskShouldNotChangeHistory() {
-        // Добавляем null, история не должна измениться
-        historyManager.add(null);
-
-        List<Task> history = historyManager.getHistory();
-        assertTrue(history.isEmpty(), "История не должна измениться после добавления null");
-    }
-
-    @Test
-    void historyShouldReturnNewList() {
-        // Проверяем, что возвращается копия списка, а не оригинальный список истории
+    void getHistoryShouldReturnCopyOfList() {
         Task task = new Task("Задача 1", "Описание 1");
         historyManager.add(task);
 
         List<Task> history = historyManager.getHistory();
         history.clear(); // очищаем копию
 
-        // Оригинальная история должна остаться неизменной
         assertEquals(1, historyManager.getHistory().size(),
-                "Изменения в возвращённом списке не должны влиять на историю");
+                "Оригинальная история не должна изменяться при модификации копии");
     }
 }

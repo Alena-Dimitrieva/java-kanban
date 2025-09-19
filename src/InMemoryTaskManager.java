@@ -8,8 +8,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final Map<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
 
-    @Override
-    public int generateId() {
+    private int generateId() {
         return nextId++;
     }
 
@@ -172,8 +171,7 @@ public class InMemoryTaskManager implements TaskManager {
         return result;
     }
 
-    @Override
-    public void updateEpicStatus(Epic epic) {
+    private void updateEpicStatus(Epic epic) {
         List<Subtask> epicSubtasks = getSubtasksOfEpic(epic.getId());
         if (epicSubtasks.isEmpty()) {
             epic.setStatus(Status.NEW);

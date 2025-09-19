@@ -4,29 +4,46 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-
+// HistoryTest — интеграционные тесты истории через TaskManager
 class HistoryTest {
+
     private TaskManager manager;
 
     @BeforeEach
     void setUp() {
-        manager = Managers.getDefault(); // создаём новый менеджер перед каждым тестом
+        manager = Managers.getDefault();
+    }
+ //тест должен провалиться
+    @Test
+    void shouldNotDuplicateTaskInHistory() {
+        Task task = new Task("Тестовая задача", "Описание");
+        manager.addTask(task);
+
+        // Первый просмотр
+        manager.getTaskById(task.getId());
+        // Второй просмотр
+        manager.getTaskById(task.getId());
+
+        List<Task> history = manager.getHistory();
+
+        // Ожидаем, что история содержит только одну версию задачи
+        assertEquals(1, history.size(), "История не должна содержать дубликаты задачи");
+        assertEquals(task, history.get(0), "В истории должна быть сохранена только оригинальная задача");
     }
 
     @Test
     void shouldAddTasksToHistory() {
-        // создаём разные типы задач
+        // создание разных типов задач
         Task task1 = new Task("Переезд", "Собрать коробки");
         Task task2 = new Task("Учёба", "Сделать дз по Java");
         Epic epic = new Epic("Организовать праздник", "Семейный праздник на 20 человек");
         Subtask subtask = new Subtask("Купить продукты", "Закупиться в магазине", 3);
-
         manager.addTask(task1);
         manager.addTask(task2);
         manager.addEpic(epic);
         manager.addSubtask(subtask);
 
-        // симулируем просмотр задач
+        // симулятор просмотра задач
         manager.getTaskById(task1.getId());
         manager.getTaskById(task2.getId());
         manager.getEpicById(epic.getId());
@@ -34,7 +51,7 @@ class HistoryTest {
 
         List<Task> history = manager.getHistory();
 
-        // проверяем порядок и количество
+        // проверка порядка и количества
         assertEquals(4, history.size(), "История должна содержать 4 задачи");
         assertEquals(task1, history.get(0), "Первым в истории должен быть task1");
         assertEquals(task2, history.get(1), "Вторым в истории должен быть task2");
@@ -47,21 +64,22 @@ class HistoryTest {
         Epic epic = new Epic("Большой эпик", "Много подзадач");
         manager.addEpic(epic);
 
-        // добавляем 11 просмотров одной и той же задачи
+        // добавление 11 просмотров одной и той же задачи
         for (int i = 0; i < 11; i++) {
             manager.getEpicById(epic.getId());
         }
 
         List<Task> history = manager.getHistory();
 
-        // проверяем лимит 10 элементов
+        // проверка лимита 10 элементов
         assertEquals(10, history.size(), "История не должна превышать 10 элементов");
     }
 
     @Test
     void shouldHandleNullTasksGracefully() {
-        // проверяем, что null не добавляется в историю
+        // проверка, что null не добавляется в историю
         manager.getTaskById(-1); // несуществующий ID
+
         List<Task> history = manager.getHistory();
         assertTrue(history.isEmpty(), "История должна оставаться пустой после запроса несуществующей задачи");
     }
@@ -75,7 +93,7 @@ class HistoryTest {
         List<Task> history = manager.getHistory();
         Task saved = history.get(0);
 
-        // проверяем, что данные задачи не изменились при добавлении в историю
+        // проверка, что данные задачи не изменились при добавлении в историю
         assertEquals(task.getId(), saved.getId(), "ID задачи должен совпадать");
         assertEquals(task.getTitle(), saved.getTitle(), "Название задачи должно совпадать");
         assertEquals(task.getDescription(), saved.getDescription(), "Описание задачи должно совпадать");
@@ -86,8 +104,7 @@ class HistoryTest {
     void shouldAllowDuplicateTasksInHistory() {
         Task task = new Task("Дубликат", "Описание дубликата");
         manager.addTask(task);
-
-        // дважды просмотрим одну задачу
+        // двойной просмотр одной задачи
         manager.getTaskById(task.getId());
         manager.getTaskById(task.getId());
 
