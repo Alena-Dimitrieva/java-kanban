@@ -26,22 +26,6 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyShouldNotExceedLimit() {
-        // Добавляем 12 задач при лимите = 10
-        for (int i = 1; i <= 12; i++) {
-            Task task = new Task("Задача " + i, "Описание " + i);
-            task.setId(i);
-            historyManager.add(task);
-        }
-
-        List<Task> history = historyManager.getHistory();
-
-        assertEquals(10, history.size(), "История не должна превышать лимит в 10 задач");
-        assertEquals(3, history.get(0).getId(), "Первая задача в истории должна быть с id=3");
-        assertEquals(12, history.get(9).getId(), "Последняя задача должна быть с id=12");
-    }
-
-    @Test
     void getHistoryShouldReturnCopyOfList() {
         Task task = new Task("Задача 1", "Описание 1");
         historyManager.add(task);

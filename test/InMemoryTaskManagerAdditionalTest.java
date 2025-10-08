@@ -75,8 +75,6 @@ class InMemoryTaskManagerAdditionalTest {
 
     @Test
     void historyShouldTrackMixedGetCalls() {
-        InMemoryTaskManager manager = new InMemoryTaskManager();
-
         Task task = new Task("Task", "Task Desc");
         Epic epic = new Epic("Epic", "Epic Desc");
         Subtask subtask = new Subtask("Subtask", "Sub Desc", 2);
@@ -93,33 +91,12 @@ class InMemoryTaskManagerAdditionalTest {
 
         List<Task> history = manager.getHistory();
 
-        // Проверка размера истории (теперь 4, так как дубликаты допустимы)
-        assertEquals(4, history.size(), "История должна содержать все просмотры, включая повторные");
+        // Теперь история должна содержать 3 элемента (уникальные задачи)
+        assertEquals(3, history.size(), "История должна содержать уникальные просмотры без дубликатов");
 
-        // Проверка порядка просмотров
+        // Проверка порядка просмотров после повторного Epic
         assertEquals(task, history.get(0), "Task должен быть первым просмотренным");
-        assertEquals(epic, history.get(1), "Epic должен быть вторым просмотренным");
-        assertEquals(subtask, history.get(2), "Subtask должен быть третьим просмотренным");
-        assertEquals(epic, history.get(3), "Epic должен быть последним после повторного просмотра");
-    }
-
-    @Test
-    void historyShouldNotExceedLimit() {
-        // Создание 12 задач
-        for (int i = 1; i <= 12; i++) {
-            Task task = new Task("Task" + i, "Desc" + i);
-            manager.addTask(task);
-            manager.getTaskById(task.getId());
-        }
-
-        List<Task> history = manager.getHistory();
-
-        // Проверка, что в истории только 10 последних
-        assertEquals(10, history.size(), "История не должна превышать лимит из 10 задач");
-
-        // Проверка, что это последние 10 задач
-        for (int i = 0; i < 10; i++) {
-            assertEquals("Task" + (i + 3), history.get(i).getTitle());
-        }
+        assertEquals(subtask, history.get(1), "Subtask должен быть вторым просмотренным");
+        assertEquals(epic, history.get(2), "Epic должен быть последним после повторного просмотра");
     }
 }
