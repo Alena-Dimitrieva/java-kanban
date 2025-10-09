@@ -2,32 +2,22 @@ import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static class Node {
-        Task task;
-        Node prev;
-        Node next;
-
-        Node(Node prev, Task task, Node next) {
-            this.prev = prev;
-            this.task = task;
-            this.next = next;
-        }
-    }
-
     private final Map<Integer, Node> nodeMap = new HashMap<>(); // для быстрого доступа по id
     private Node head; // начало списка
     private Node tail; // конец списка
 
     @Override
     public void add(Task task) {
-        if (task == null) return;
+        if (task == null) {
+            return;
+        }
 
-        // Если задача уже есть — удаляем старый узел
+        // Если задача уже есть — удаляется старый узел
         if (nodeMap.containsKey(task.getId())) {
             remove(task.getId());
         }
 
-        // Добавляем задачу в конец списка
+        // Добавление задачи в конец списка
         linkLast(task);
     }
 
@@ -41,18 +31,21 @@ public class InMemoryHistoryManager implements HistoryManager {
         } else {
             oldTail.next = newNode;
         }
-        nodeMap.put(task.getId(), newNode); // сохраняем в HashMap
+        nodeMap.put(task.getId(), newNode); // сохранение в HashMap
     }
 
     @Override
     public void remove(int id) {
-        Node node = nodeMap.remove(id); // получаем узел по id
-        if (node == null) return;
-        removeNode(node); // удаляем его из списка
+        Node node = nodeMap.get(id);
+        if (node != null) {
+            removeNode(node);
+        }
     }
 
     // Удаление узла из двусвязного списка
     private void removeNode(Node node) {
+        nodeMap.remove(node.task.getId()); // теперь удаление здесь
+
         Node prev = node.prev;
         Node next = node.next;
 
@@ -78,5 +71,18 @@ public class InMemoryHistoryManager implements HistoryManager {
             current = current.next;
         }
         return history;
+    }
+
+    // Вложенный класс перенесён в конец
+    private static class Node {
+        Task task;
+        Node prev;
+        Node next;
+
+        Node(Node prev, Task task, Node next) {
+            this.prev = prev;
+            this.task = task;
+            this.next = next;
+        }
     }
 }
