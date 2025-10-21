@@ -1,11 +1,12 @@
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int nextId = 1;
+    // Теперь наследники могут видеть и использовать эти поля
+    protected int nextId = 1;
 
-    private final Map<Integer, Task> tasks = new HashMap<>();
-    private final Map<Integer, Epic> epics = new HashMap<>();
-    private final Map<Integer, Subtask> subtasks = new HashMap<>();
+    protected final Map<Integer, Task> tasks = new HashMap<>();
+    protected final Map<Integer, Epic> epics = new HashMap<>();
+    protected final Map<Integer, Subtask> subtasks = new HashMap<>();
 
     private final HistoryManager historyManager;
 
@@ -18,7 +19,7 @@ public class InMemoryTaskManager implements TaskManager {
         this(Managers.getDefaultHistory());
     }
 
-    private int generateId() {
+    protected int generateId() {
         return nextId++;
     }
 
@@ -112,9 +113,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic != null) {
             for (int subId : epic.getSubtaskIds()) {
                 subtasks.remove(subId);
-                historyManager.remove(subId); // удаляем подзадачи из истории
+                historyManager.remove(subId); // удаление подзадачи из истории
             }
-            historyManager.remove(id); // удаляем эпик из истории
+            historyManager.remove(id); // удаление эпик из истории
         }
     }
 
