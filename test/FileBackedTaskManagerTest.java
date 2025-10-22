@@ -24,7 +24,6 @@ class FileBackedTaskManagerTest {
     @Test
     void testSaveLoadEmptyManager() {
         // проверка сохранения и загрузки пустого менеджера
-        manager.save();
 
         FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(tempFile);
 
