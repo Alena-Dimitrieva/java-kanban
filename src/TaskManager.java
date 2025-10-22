@@ -14,7 +14,7 @@ public interface TaskManager {
 
     void deleteTaskById(int id);
 
-    //  Методы для Epic
+    // Методы для Epic
     List<Epic> getAllEpics();
 
     void deleteAllEpics();
@@ -27,6 +27,7 @@ public interface TaskManager {
 
     void deleteEpicById(int id);
 
+    // Методы для Subtask
     List<Subtask> getAllSubtasks();
 
     void deleteAllSubtasks();
@@ -41,5 +42,6 @@ public interface TaskManager {
 
     List<Subtask> getSubtasksOfEpic(int epicId);
 
-    List<Task> getHistory();
+    // Добавлено для истории просмотров
+    List<Task> getHistory(); // этот метод возвращает историю просмотров задач
 }
