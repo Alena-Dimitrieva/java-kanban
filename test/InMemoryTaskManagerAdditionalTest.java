@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerAdditionalTest {
 
-    private InMemoryTaskManager manager;
+    protected InMemoryTaskManager manager;
 
     @BeforeEach
     void setUp() {
@@ -28,15 +28,15 @@ class InMemoryTaskManagerAdditionalTest {
 
         // Обновление
         task = new Task("Updated Task", "Updated Description");
-        task.setId(manager.getAllTasks().get(0).getId());
+        task.setId(manager.getAllTasks().getFirst().getId());
         manager.updateTask(task);
 
         epic = new Epic("Updated Epic", "Updated Epic Description");
-        epic.setId(manager.getAllEpics().get(0).getId());
+        epic.setId(manager.getAllEpics().getFirst().getId());
         manager.updateEpic(epic);
 
         subtask = new Subtask("Updated Subtask", "Updated Subtask Description", epic.getId());
-        subtask.setId(manager.getAllSubtasks().get(0).getId());
+        subtask.setId(manager.getAllSubtasks().getFirst().getId());
         manager.updateSubtask(subtask);
 
         // Проверка, что обновления сохранились
