@@ -1,19 +1,25 @@
 import org.junit.jupiter.api.*;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends AbstractTaskManagerTest<FileBackedTaskManager> {
 
     private File tempFile;
     private FileBackedTaskManager manager;
 
-    @BeforeEach
-    void setUp() throws IOException {
+
+    @Override
+    FileBackedTaskManager getManager() throws IOException {
         tempFile = File.createTempFile("tasks", ".csv");
-        manager = new FileBackedTaskManager(tempFile);
+        return new FileBackedTaskManager(tempFile);
+    }
+
+    @BeforeEach
+    void setUpFileBackedTaskManager() throws IOException {
+        manager = getManager();
     }
 
     @AfterEach
@@ -45,3 +51,4 @@ class FileBackedTaskManagerTest {
         assertTrue(loaded.getAllTasks().isEmpty(), "Tasks должны быть пустыми после удаления");
     }
 }
+

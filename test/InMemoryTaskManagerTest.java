@@ -1,17 +1,14 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InMemoryTaskManagerTest {
+class InMemoryTaskManagerTest extends AbstractTaskManagerTest<InMemoryTaskManager> {
 
-    private InMemoryTaskManager manager;
-
-    @BeforeEach
-    void setUp() {
-        manager = new InMemoryTaskManager();
+    @Override
+    InMemoryTaskManager getManager() {
+        return new InMemoryTaskManager();
     }
 
     //  Task тест
@@ -127,7 +124,7 @@ class InMemoryTaskManagerTest {
 
         List<Task> history = manager.getHistory();
         assertEquals(1, history.size());
-        assertEquals(task, history.get(0));
+        assertEquals(task, history.getFirst());
     }
 
     @Test
