@@ -108,6 +108,6 @@ class TaskTest {
         List<Task> history = manager.getHistory();
 
         assertEquals(1, history.size(), "История должна содержать одну задачу");
-        assertEquals(task, history.get(0), "История должна содержать добавленную задачу");
+        assertEquals(task, history.getFirst (), "История должна содержать добавленную задачу");
     }
 }
