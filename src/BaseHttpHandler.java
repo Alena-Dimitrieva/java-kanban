@@ -18,14 +18,14 @@ public abstract class BaseHttpHandler {
     }
 
     // Отправка объекта в JSON
-    protected void sendJson(HttpExchange h, Object obj, int code, Gson gson) throws IOException {
-        String json = null;
+    protected void sendJson(HttpExchange h, Object obj, Gson gson) throws IOException {
+        String json;
         try {
             json = gson.toJson(obj);
         } catch (Exception e) {
-            throw new RuntimeException (e);
+            throw new RuntimeException(e);
         }
-        sendResponse(h, code, json);
+        sendResponse(h, 200, json);
     }
 
     // 200 OK с текстом

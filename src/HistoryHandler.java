@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
 import java.io.IOException;
 
 //Хэндлер для получения истории просмотров задач.
@@ -22,7 +23,7 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
                 return;
             }
 
-            sendJson(h, manager.getHistory(), 200, gson); // 200
+            sendJson(h, manager.getHistory(), gson); // 200
 
         } catch (IOException e) {
             sendInternalError(h); // 500

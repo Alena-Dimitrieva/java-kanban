@@ -7,7 +7,7 @@ import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
- //Главный HTTP сервер приложения для управления задачами.Реализует REST API
+//Главный HTTP сервер приложения для управления задачами.Реализует REST API
 public class HttpTaskServer {
 
     private final HttpServer server;

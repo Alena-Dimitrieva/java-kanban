@@ -1,6 +1,7 @@
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+
 import java.io.IOException;
 
 // Хэндлер для получения задач в порядке приоритета.
@@ -22,7 +23,7 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
                 return;
             }
 
-            sendJson(h, manager.getPrioritizedTasks(), 200, gson); // 200
+            sendJson(h, manager.getPrioritizedTasks(), gson); // 200
 
         } catch (IOException e) {
             sendInternalError(h); // 500

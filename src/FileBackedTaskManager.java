@@ -1,4 +1,7 @@
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -229,7 +232,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-   // Добавлено: сохранение истории при просмотре задач
+    // Добавлено: сохранение истории при просмотре задач
     @Override
     public Task getTaskById(int id) {
         Task task = super.getTaskById(id);
@@ -254,6 +257,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     //  Демонстрация работы менеджера
     public static void main(String[] args) {
         File file = new File("tasks.csv");
+        FileBackedTaskManager manager = getFileBackedTaskManager(file);
+
+        System.out.println("До загрузки:");
+        System.out.println(manager.getAllTasks());
+        System.out.println(manager.getAllEpics());
+        System.out.println(manager.getAllSubtasks());
+        System.out.println("История: " + manager.getHistory());
+
+        // Восстановление менеджера из файла
+        FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(file);
+
+        System.out.println("\nПосле загрузки:");
+        System.out.println(loaded.getAllTasks());
+        System.out.println(loaded.getAllEpics());
+        System.out.println(loaded.getAllSubtasks());
+        System.out.println("История: " + loaded.getHistory());
+    }
+
+    private static FileBackedTaskManager getFileBackedTaskManager(File file) {
         FileBackedTaskManager manager = new FileBackedTaskManager(file);
 
         // создание задачи
@@ -270,20 +292,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         manager.getTaskById(t1.getId());
         manager.getEpicById(epic.getId());
         manager.getSubtaskById(s1.getId());
-
-        System.out.println("До загрузки:");
-        System.out.println(manager.getAllTasks());
-        System.out.println(manager.getAllEpics());
-        System.out.println(manager.getAllSubtasks());
-        System.out.println("История: " + manager.getHistory());
-
-        // Восстановление менеджера из файла
-        FileBackedTaskManager loaded = FileBackedTaskManager.loadFromFile(file);
-
-        System.out.println("\nПосле загрузки:");
-        System.out.println(loaded.getAllTasks());
-        System.out.println(loaded.getAllEpics());
-        System.out.println(loaded.getAllSubtasks());
-        System.out.println("История: " + loaded.getHistory());
+        return manager;
     }
 }

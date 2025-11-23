@@ -5,7 +5,8 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class HistoryHandlerTest extends AbstractHttpTest {
 
@@ -26,7 +27,7 @@ public class HistoryHandlerTest extends AbstractHttpTest {
     public void testGetHistoryWithTasks() throws IOException, InterruptedException {
         Task task = new Task("Task1", "Desc");
         manager.addTask(task);
-        manager.getTaskById (task.getId ());
+        manager.getTaskById(task.getId());
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:" + port + "/history"))
