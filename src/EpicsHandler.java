@@ -44,10 +44,10 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             if (epic == null) {
                 sendNotFound(h, "Epic not found"); // 404
             } else {
-                sendJson(h, epic, 200, gson); // 200
+                sendJson(h, epic, gson); // 200
             }
         } else {
-            sendJson(h, manager.getAllEpics(), 200, gson); // 200
+            sendJson(h, manager.getAllEpics(), gson); // 200
         }
     }
 
@@ -67,7 +67,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
             sendCreated(h, "Epic created"); // 201
         } else {
             manager.updateEpic(epic);
-            sendJson(h, epic, 200, gson); // 200
+            sendJson(h, epic, gson); // 200
         }
     }
 

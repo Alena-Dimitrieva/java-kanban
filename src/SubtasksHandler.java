@@ -46,10 +46,10 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             if (subtask == null) {
                 sendNotFound(h, "Subtask not found"); // 404
             } else {
-                sendJson(h, subtask, 200, gson); // 200
+                sendJson(h, subtask, gson); // 200
             }
         } else {
-            sendJson(h, manager.getAllSubtasks(), 200, gson); // 200
+            sendJson(h, manager.getAllSubtasks(), gson); // 200
         }
     }
 
@@ -69,7 +69,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
             sendCreated(h, "Subtask created"); // 201
         } else {
             manager.updateSubtask(subtask);
-            sendJson(h, subtask, 200, gson); // 200
+            sendJson(h, subtask, gson); // 200
         }
     }
 

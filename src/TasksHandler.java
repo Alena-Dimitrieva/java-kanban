@@ -46,10 +46,10 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             if (task == null) {
                 sendNotFound(h, "Task not found"); // 404
             } else {
-                sendJson(h, task, 200, gson); // 200
+                sendJson(h, task, gson); // 200
             }
         } else {
-            sendJson(h, manager.getAllTasks(), 200, gson); // 200
+            sendJson(h, manager.getAllTasks(), gson); // 200
         }
     }
 
@@ -69,7 +69,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
             sendCreated(h, "Task created"); // 201
         } else {
             manager.updateTask(task);
-            sendJson(h, task, 200, gson); // 200
+            sendJson(h, task, gson); // 200
         }
     }
 
